@@ -1,3 +1,3 @@
 # Pinochle
 
-My attempt at a Pinocle game.  Not very far along.
+My attempt at a Pinochle game.  Not very far along.

@@ -1,4 +1,4 @@
-#Paul Puglielli
+//Paul Puglielli
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -149,47 +149,69 @@ printf("++ Contents of Hand %d\n",h+1);
            GetSuit(hand[h][i].suit));
   }
 }
+void advance_cursor() {
+  static int pos=0;
+  char cursor[4]={'/','-','\\','|'};
+  printf("%c\b", cursor[pos]);
+  fflush(stdout);
+  pos = (pos+1) % 4;
+}
 
 void Shuffle(struct CARD* deck)
 {
- struct CARD temp;
- short i,j;
+   struct CARD temp;
+   short i,j,k;
  
- srand( (unsigned)time( NULL ) );
+   srand( (unsigned)time( NULL ) );
 
-    
-    
- for (i=47;i>=0;i--)
- {                       
-   j=rand() % 10;       
-   temp.card=deck[j].card;
-   temp.suit=deck[j].suit;
-   deck[j].card=deck[i].card;
-   deck[j].suit=deck[i].suit;
-   deck[i].card=temp.card;
-   deck[i].suit=temp.suit;
-  }
+   k=((rand()%25) +1);
+   printf("shuffeling %i times...\n",k);
+   for (k; k >=1 ; k--) //how many times to shuffle
+   {
+ 	for (i=47;i>=0;i--) //for each card
+ 	{                       
+	   j=rand() % 48; //randomly pick a card
+
+	   /* Heart of the Shuffle:
+	   store random card in a temp holder
+	   take card at current desk position and put it in random location
+	   put temp card that was at random spot in current deck position  */
+	   temp.card=deck[j].card;
+	   temp.suit=deck[j].suit;
+   	   
+ 	   deck[j].card=deck[i].card;
+	   deck[j].suit=deck[i].suit;
+
+	   deck[i].card=temp.card;
+	   deck[i].suit=temp.suit;
+
+  	}
+
+advance_cursor();
+usleep(100000);
+ }
+
 }
 
 void Init(struct CARD* deck)
 {
- char i;
+ char i=0;
  enum CARDS c;
  enum SUIT s;
   
 
-for (i=0;i<48;i++) 
-{
-  for (s=spade;s<=heart;s++)
-  {
-    for (c=ace;c<=nine;c++)
-    {
-      deck[i].suit=s;
-      deck[i].card=c;
-      i++;
-    }
-  }
- }
+   for (i=0;i<48;) //Needed because innerloops will only get half the deck built.  There are two of each card (two nine of spades for instnace
+   {
+     for (s=spade;s<=heart;s++)
+     {
+        for (c=ace;c<=nine;c++)
+        {
+           deck[i].suit=s;
+           deck[i].card=c;
+           i++;
+        }
+     }
+   }
 }
 
 void Print(struct CARD *deck)
